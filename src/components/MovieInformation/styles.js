@@ -65,5 +65,23 @@ export default makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
         }
+    },
+
+    modal: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+
+    video: {
+
+        width: '50%',
+        height: '50%',
+        alignSelf: 'center',
+        [theme.breakpoints.down('sm')]: {
+            width: '90%',
+            height: '90%',
+        }
     }
 }));
