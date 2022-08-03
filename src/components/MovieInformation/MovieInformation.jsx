@@ -4,16 +4,18 @@ import { Movie as MovieIcon, Theaters, Language, PlusOne, Favorite, FavoriteBord
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { useGetMovieQuery } from '../../services/TMDB';
+import { useGetMovieQuery, useGetRecommendationsQuery } from '../../services/TMDB';
 import { selectGenreOrCategory } from '../../features/currentGenreOrCategory';
 import genreIcons from '../../assets/genres';
 import useStyles from './styles'
+import MovieList from '../MovieList/MovieList';
 function MovieInformation() {
   const { id } = useParams()
   const { data, isFetching, error } = useGetMovieQuery(id)
   const classes = useStyles()
   const dispatch = useDispatch()
 
+  const { data: recommendations, isFetching: isRecommendationsFetching } = useGetRecommendationsQuery({ list: '/recommendations', movie_id: id })
   const isMovieFavorited = false;
   const isMovieWatchlisted = false;
   const addToFavorites = () => {
@@ -24,6 +26,7 @@ function MovieInformation() {
 
   }
 
+  console.log(recommendations.results.length)
   if (isFetching) {
     return (
       <Box display={"flex"} justifyContent="center" alignItems={"center"}>
@@ -40,7 +43,7 @@ function MovieInformation() {
     )
   }
 
-  console.log(data)
+  // console.log(data)
   return (
     <Grid container className={classes.containerSpaceAround}>
       <Grid item sm={12} lg={4}>
@@ -124,6 +127,12 @@ function MovieInformation() {
           </div>
         </Grid>
       </Grid>
+      <Box marginTop="5rem" width="100%">
+        <Typography variant='h3' gutterBottom align='center'>
+          You might also like
+        </Typography>
+        {recommendations.results.length ? <MovieList movies={recommendations} numberOfMovies={12} /> : <Typography variant='h5' align='center'>No recommendations found</Typography>}
+      </Box>
     </Grid>
   );
 }
